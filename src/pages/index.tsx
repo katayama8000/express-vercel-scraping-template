@@ -24,7 +24,9 @@ const Home: NextPage = () => {
     );
     console.log(coconalaRank.data.status);
     if (coconalaRank.data.status === 200) {
-      setdemand(coconalaRank.data.items);
+      console.log(coconalaRank.data.items.filter((v) => v.month == "2022-07"));
+
+      setdemand(coconalaRank.data.items.filter((v) => v.month == "2022-07"));
     }
   };
 
