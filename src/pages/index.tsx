@@ -1,34 +1,43 @@
 import type { NextPage } from "next";
-import { Button, useMediaQuery, useViewportSize } from "src/lib/mantine";
+import { Button } from "src/lib/mantine";
+import axios from "axios";
+import { useState } from "react";
 
+type coconalaDemand = {
+  avg: number;
+  category: string;
+  count: number;
+  month: string;
+  quote_count: number;
+  specified_amount: number;
+  specified_avg: number;
+  specified_count: number;
+  specified_max: number;
+  specified_min: number;
+  sum: number;
+};
 const Home: NextPage = () => {
-  const { width } = useViewportSize();
-  const largerThanXs = useMediaQuery("xs");
-  const largerThanSm = useMediaQuery("sm");
-  const largerThanMd = useMediaQuery("md");
-  const largerThanLg = useMediaQuery("lg");
-  const largerThanXl = useMediaQuery("xl");
-
-  const handleClick = () => {
-    console.log("Hello!");
+  const [demand, setdemand] = useState<coconalaDemand[]>();
+  const handleClick = async () => {
+    const coconalaRank = await axios.get(
+      "https://coconala-requests-checker.vercel.app/1f63a122/rank/"
+    );
+    console.log(coconalaRank.data.status);
+    if (coconalaRank.data.status === 200) {
+      setdemand(coconalaRank.data.items);
+    }
   };
 
   return (
     <div className="p-20">
-      <div className="bg-fuchsia-200 xs:bg-red-200 sm:bg-amber-200 md:bg-lime-200 lg:bg-emerald-200 xl:bg-cyan-200">
-        <div>{`width: ${width}`}</div>
-        <div>{`largerThanXs: ${largerThanXs}`}</div>
-        <div>{`largerThanSm: ${largerThanSm}`}</div>
-        <div>{`largerThanMd: ${largerThanMd}`}</div>
-        <div>{`largerThanLg: ${largerThanLg}`}</div>
-        <div>{`largerThanXl: ${largerThanXl}`}</div>
-      </div>
       <Button dent onClick={handleClick} className="mt-4 block">
         Click me!
       </Button>
-      <Button onClick={handleClick} className="mt-4 block">
-        Click me!
-      </Button>
+      <div>
+        {demand?.map((item, index) => {
+          return <div key={index}>{item.category}</div>;
+        })}
+      </div>
     </div>
   );
 };
