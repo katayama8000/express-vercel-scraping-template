@@ -27,27 +27,41 @@ export const options = {
       position: "top" as const,
     },
     title: {
-      display: true,
+      display: false,
       text: "Chart.js Bar Chart",
     },
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const coconalaRank = [
+  { category: "イラスト作成", count: 1105 },
+  { category: "記事・Webコンテンツ作成", count: 617 },
+  { category: "動画編集", count: 594 },
+  { category: "その他（マネー・副業・アフィリ）", count: 470 },
+  { category: "ロゴデザイン", count: 445 },
+  { category: "アイコン作成", count: 388 },
+  { category: "作業自動化・効率化", count: 316 },
+  { category: "チラシ作成・フライヤーデザイン", count: 309 },
+  { category: "その他（デザイン）", count: 299 },
+  { category: "Webサイト修正・カスタム・コンサル", count: 297 },
+  { category: "ホームページ作成", count: 296 },
+];
+
+const labels = coconalaRank.map((v) => v.category);
 
 export const data = {
   labels,
   datasets: [
     {
       label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: coconalaRank.map((v) => v.count),
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
+    // {
+    //   label: "Dataset 2",
+    //   data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+    //   backgroundColor: "rgba(53, 162, 235, 0.5)",
+    // },
   ],
 };
 
