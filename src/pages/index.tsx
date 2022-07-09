@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { Button } from "src/lib/mantine";
 import axios from "axios";
 import { VerticalBar } from "src/component/chart/verticalBar";
-import { Loader, LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay } from "@mantine/core";
 
 type coconalaType = {
   avg: number;
