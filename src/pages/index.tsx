@@ -29,11 +29,9 @@ const Home: NextPage = () => {
     }
   };
 
-  const getRankTop10 = (coconalaRank: coconalaType[]) => {
+  const getRankTop10 = (AllData: coconalaType[]) => {
     //ひと月のデータ
-    const data = coconalaRank.filter(
-      (v: { month: string }) => v.month == "2022-07"
-    );
+    const data = AllData.filter((v: { month: string }) => v.month == "2022-07");
     //{ category: v.category, count: 0 }の配列を作成
     let array: { category: string; count: number }[] = [];
     data.map((v: { category: string }) => {
@@ -41,7 +39,7 @@ const Home: NextPage = () => {
     });
     //categoryが同じならcountを加算
     array.forEach((v) => {
-      coconalaRank?.forEach((v2: { category: string; count: number }) => {
+      AllData?.forEach((v2: { category: string; count: number }) => {
         if (v.category === v2.category) {
           v.count += v2.count;
         }
