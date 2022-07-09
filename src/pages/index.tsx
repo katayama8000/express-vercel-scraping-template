@@ -1,7 +1,9 @@
+import { useState } from "react";
 import type { NextPage } from "next";
 import { Button } from "src/lib/mantine";
 import axios from "axios";
-import { useState } from "react";
+import { VerticalBar } from "src/component/chart/verticalBar";
+import { Loader, LoadingOverlay } from "@mantine/core";
 
 type coconalaType = {
   avg: number;
@@ -17,7 +19,11 @@ type coconalaType = {
   sum: number;
 };
 const Home: NextPage = () => {
+  const [top10, setTop10] = useState<{ category: string; count: number }[]>();
+  const [loadingFlag, setLoadnigFlag] = useState<boolean>(false);
+
   const handleClick = async () => {
+    setLoadnigFlag(true);
     const coconalaRank = await axios.get(
       "https://coconala-requests-checker.vercel.app/1f63a122/rank/"
     );
@@ -27,6 +33,7 @@ const Home: NextPage = () => {
       const AllData = coconalaRank.data.items;
       getRankTop10(AllData);
     }
+    setLoadnigFlag(false);
   };
 
   const getRankTop10 = (AllData: coconalaType[]) => {
@@ -49,14 +56,21 @@ const Home: NextPage = () => {
     let result = array.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
-    console.log(result);
+    result = result.slice(0, 10);
+    setTop10(result);
   };
 
   return (
     <div className="p-20">
+      <LoadingOverlay
+        visible={loadingFlag}
+        loaderProps={{ size: "xl", variant: "dots" }}
+        overlayOpacity={0.3}
+      />
       <Button dent onClick={handleClick} className="mt-4 block">
         Click me!
       </Button>
+      <VerticalBar conconalaTop10={top10} />
     </div>
   );
 };
