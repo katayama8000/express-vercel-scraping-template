@@ -68,7 +68,7 @@ const Home: NextPage = () => {
         overlayOpacity={0.3}
       />
       <Button dent onClick={handleClick} className="mt-4 block">
-        Click me!
+        show Top 10
       </Button>
       <VerticalBar conconalaTop10={top10} />
     </div>
