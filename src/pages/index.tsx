@@ -1,9 +1,11 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { Button } from "src/lib/mantine";
 import axios from "axios";
-import { VerticalBar } from "src/component/chart/verticalBar";
+import { Button } from "src/lib/mantine";
 import { LoadingOverlay } from "@mantine/core";
+//component
+import { VerticalBar } from "src/component/chart/verticalBar";
+import { LineGraph } from "src/component/chart/lineGraph";
 
 type coconalaType = {
   avg: number;
@@ -18,8 +20,10 @@ type coconalaType = {
   specified_min: number;
   sum: number;
 };
+
 const Home: NextPage = () => {
   const [top10, setTop10] = useState<{ category: string; count: number }[]>();
+  const [chartData, setChartData] = useState<coconalaType[]>();
   const [loadingFlag, setLoadnigFlag] = useState<boolean>(false);
 
   const handleClick = async () => {
@@ -36,12 +40,14 @@ const Home: NextPage = () => {
     setLoadnigFlag(false);
   };
 
+  let obj: { category: string; count: number[] }[] = [];
+
   const getRankTop10 = (AllData: coconalaType[]) => {
     //ひと月のデータ
     const data = AllData.filter((v: { month: string }) => v.month == "2022-07");
     //{ category: v.category, count: 0 }の配列を作成
     let array: { category: string; count: number }[] = [];
-    data.map((v: { category: string }) => {
+    data.forEach((v: { category: string }) => {
       array.push({ category: v.category, count: 0 });
     });
     //categoryが同じならcountを加算
@@ -58,6 +64,15 @@ const Home: NextPage = () => {
     });
     result = result.slice(0, 10);
     setTop10(result);
+    const chartData = AllData.filter(
+      (v: { month: string; category: string }) =>
+        ["2022-04", "2022-05", "2022-06", "2022-07"].includes(v.month) &&
+        result
+          .map((v: { count: number; category: string }) => v.category)
+          .includes(v.category)
+    );
+    console.log(chartData);
+    setChartData(chartData);
   };
 
   return (
@@ -71,6 +86,7 @@ const Home: NextPage = () => {
         show Top 10
       </Button>
       <VerticalBar conconalaTop10={top10} />
+      <LineGraph chartData={chartData!} />
     </div>
   );
 };
