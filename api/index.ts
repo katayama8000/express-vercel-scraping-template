@@ -1,5 +1,7 @@
 import express from "express";
 import { launch, type Page } from "puppeteer";
+import PackageJson from "../package.json";
+
 
 const app = express();
 
@@ -14,19 +16,22 @@ const getScreenshot = async (url: string): Promise<Buffer> => {
     return screenshot;
 }
 
-app.get("/", async (request, response) => {
+app.get("/", async (_request, response) => {
     const res = await getScreenshot("https://www.google.com");
+    console.log(res);
     response.setHeader("Content-Type", "image/png");
     response
         .status(200)
         .send(res);
 });
 
-app
-    .listen(PORT, () => {
-        console.log(`Server is running at http://localhost:${PORT}`);
-    })
-    .on("error", (error) => {
-        // エラーの処理
-        throw new Error(error.message);
-    });
+app.get("/version", async (_request, response) => {
+    console.log(PackageJson.version);
+    response.json({ version: PackageJson.version });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+}).on("error", (error) => {
+    throw new Error(error.message);
+});
